@@ -305,7 +305,7 @@ z = 659!14;
 (
 w = Window.new("Main Page",Rect.new(175, 125, 1000, 500));
 w.front;
-w.alwaysOnTop_(true);
+//w.alwaysOnTop_(true);
 //w.background_(Color.new255(204, 255, 204));
 w.background_(Color.white);
 ~label0 = StaticText.new(w,Rect.new(200,50,600,30))
@@ -326,7 +326,7 @@ w.background_(Color.white);
 		w.visible_(false);
 		~w1 = Window.new(~choosecateg.items[~choosecateg.value],Rect.new(175, 125, 1000, 500));
 		~w1.front;
-		~w1.alwaysOnTop_(true);
+		//~w1.alwaysOnTop_(true);
 		~w1.background_(Color.white);
 		//Add code for Crime Data
 		~label0 = StaticText.new(~w1,Rect.new(200,50,600,30))
@@ -349,7 +349,7 @@ w.background_(Color.white);
 				~w1.visible_(false);
 				~w2 = Window.new(~choosetype.items[~choosetype.value],Rect.new(175, 125, 1000, 500));
 				~w2.front;
-				~w2.alwaysOnTop_(true);
+				//~w2.alwaysOnTop_(true);
 				~w2.background_(Color.white);
 
 				~text = StaticText.new(~w2,Rect.new(140,5,800,100))
@@ -393,6 +393,8 @@ w.background_(Color.white);
 				.states = [["Play", Color.red],["Play", Color.red]];
 				~play.action = {
 					~flag = 1;
+					f = ~data2[~crime*~numstates+~state].plot(bounds:Rect(175,125,350,200), discrete: true);
+
 					if(~type == 0 ,{~sig = Pbindef(\final, \freq, Pseq(~data2[~crime*~numstates+~state]), \dur, ~dur);});
 					if(~type == 1 ,{~sig = Pbindef(\final, \freq, Pseq(500!12), \amp, Pseq(~data2[~crime*~numstates+~state].normalize(0,3)), \dur, ~dur)});
 					[~sig.play,~sig.play];
@@ -403,6 +405,12 @@ w.background_(Color.white);
 				~back1.states = [["Back", Color.black],["Back", Color.black, Color.red]];
 				~back1.action = {
 					~sig.stop;
+					if(f.parent != nil,
+						{
+							f.parent.close;
+						}
+					);
+
 					~w2.close;
 					~w1.visible_(true);
 				};
@@ -414,7 +422,7 @@ w.background_(Color.white);
 				~w1.visible_(false);
 				~w2 = Window.new(~choosetype.items[~choosetype.value],Rect.new(175, 125, 1000, 500));
 				~w2.front;
-				~w2.alwaysOnTop_(true);
+				//~w2.alwaysOnTop_(true);
 				~w2.background_(Color.white);
 
 				~text = StaticText.new(~w2,Rect.new(130,5,800,100))
@@ -459,6 +467,7 @@ w.background_(Color.white);
 				.states = [["Play", Color.red],["Play", Color.red]];
 				~play.action = {
 					s.freeAll;
+					f = ~data2[~crime*~numstates+~state].plot(bounds:Rect(175,125,350,200));
 					if(~sound == 0,
 						{~sig = {SinOsc.ar(EnvGen.ar(Env(~data2[~crime*~numstates+~state].asInteger,[~dur!11]),doneAction:2))};
 							[~sig.play,~sig.play]});
@@ -478,6 +487,12 @@ w.background_(Color.white);
 				~back1.states = [["Back", Color.black],["Back", Color.black, Color.red]];
 				~back1.action = {
 					s.freeAll;
+					if(f.parent != nil,
+						{
+							f.parent.close;
+						}
+					);
+
 					~w2.close;
 					~w1.visible_(true);
 				};
